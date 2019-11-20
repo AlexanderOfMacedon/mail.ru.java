@@ -56,52 +56,6 @@ public class TreeSerializer implements Serializer {
         Arrays.fill(charsTabs, ' ');
         return new String(charsTabs);
     }
-
-    private String arraySerialize(String name, Object array, int num_tabs) {
-        StringBuilder ret = new StringBuilder();
-        ret.append(outputStrategy.outputHead(name, tabsCreate(num_tabs)));
-        if (Array.getLength(array) == 0) {
-            ret.append(tabsCreate(num_tabs + shift) + "EMPTY ARRAY\n");
-        }
-        for (int i = 1; i <= Array.getLength(array); i++) {
-            Object o = Array.get(array, i - 1);
-            String oValue;
-            if (o == null) {
-                oValue = "null";
-            } else {
-                oValue = o.toString();
-            }
-            ret.append(outputStrategy.outputArrayLine(oValue, i, tabsCreate(num_tabs + shift)));
-        }
-        ret.append(outputStrategy.outputEnd(name, tabsCreate(num_tabs)));
-        return ret.toString();
-    }
-
-    private String collectionSerialize(String name, Collection collection, int num_tab) {
-        return arraySerialize(name, collection.toArray(), num_tab);
-    }
-
-    private String mapSerialize(String name, Map map, int num_tabs) {
-        Object[] arrayKeys = map.keySet().toArray();
-        StringBuilder ret = new StringBuilder();
-        ret.append(outputStrategy.outputHead(name, tabsCreate(num_tabs)));
-        if (Array.getLength(arrayKeys) == 0) {
-            ret.append(tabsCreate(num_tabs + shift) + "EMPTY ARRAY\n");
-        }
-        for (int i = 1; i <= Array.getLength(arrayKeys); i++) {
-            Object o = map.get(Array.get(arrayKeys, i - 1));
-            String oValue;
-            if (o == null) {
-                oValue = "null";
-            } else {
-                oValue = o.toString();
-            }
-            ret.append(outputStrategy.outputLine(Array.get(arrayKeys, i - 1).toString(), oValue,
-                    tabsCreate(num_tabs + shift)));
-        }
-        ret.append(outputStrategy.outputEnd(name, tabsCreate(num_tabs)));
-        return ret.toString();
-    }
     
     private String listsSerialize(List arrayKeys, List arrayValues, int num_tabs){
         if(arrayKeys != null && arrayKeys.size() != arrayValues.size()){
