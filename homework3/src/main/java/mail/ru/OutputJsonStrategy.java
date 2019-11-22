@@ -1,24 +1,28 @@
 package mail.ru;
 
-public class OutputXmlStrategy implements OutputStrategy {
+public class OutputJsonStrategy implements OutputStrategy {
 
     @Override
     public String outputHead(String name) {
-        return "<" + name + ">";
+        return outputName(name) + "{";
     }
 
     @Override
     public String outputEnd(String name) {
-        return "</" + name + ">";
+        return "},";
     }
 
     @Override
     public String outputLine(String name, String value) {
-        return outputHead(name) + value + outputEnd(name);
+        return outputName(name) + value + ",";
     }
 
     @Override
     public String outputArrayLine(String value, int index) {
-        return outputLine(String.valueOf(index), value);
+        return value + ",";
+    }
+
+    private String outputName(String name){
+        return "\"" + name + "\": ";
     }
 }
