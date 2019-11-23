@@ -6,12 +6,7 @@ public enum IterableType {
     ARRAY {
         @Override
         public Map<?, ?> getValues(Object o) {
-            Map<Integer,Object> retMap = new HashMap<>();
-            List<?> arrayValues = (List)o;
-            for (int i = 0; i < arrayValues.size(); i++) {
-                retMap.put(i, arrayValues.get(i));
-            }
-            return retMap;
+            return COLLECTION.getValues(Array.asList((Object[])o));
         }
     },
     COLLECTION {
