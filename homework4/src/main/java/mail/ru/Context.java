@@ -1,5 +1,7 @@
 package mail.ru;
 
+import java.util.concurrent.ExecutionException;
+
 public interface Context {
     int getCompletedTaskCount();
 
@@ -15,7 +17,7 @@ public interface Context {
 
     ExecutionStatistics getStatistics();
 
-    void awaitTermination();
+    void awaitTermination() throws InterruptedException;
 
 }
 

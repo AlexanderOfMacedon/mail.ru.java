@@ -2,27 +2,31 @@ package mail.ru;
 
 import org.junit.Test;
 
-import static org.junit.Assert.*;
+import java.util.concurrent.ExecutionException;
 
 public class ExecutionManagerClassTest {
-    ExecutionManagerClass executionManager = new ExecutionManagerClass(2);
-    Runnable runnable1 = () -> {
+    private ExecutionManagerImpl executionManager = new ExecutionManagerImpl(2);
+    private Runnable runnable1 = () -> {
         System.out.println("runnable1 do");
         try {
             Thread.sleep(5000);
         } catch (InterruptedException ignored) {
         }
     };
-    Runnable runnable2 = () -> {
+    private Runnable runnable2 = () -> {
         System.out.println("runnable2 do");
         try {
             Thread.sleep(7000);
         } catch (InterruptedException ignored) {
         }
     };
-    Runnable runnable3 = () -> {
+    private Runnable runnable3 = () -> {
         System.out.println("runnable3 do");
         int i = 1 / 0;
+    };
+
+    Runnable runnable4 = () -> {
+        System.out.println("finish runnable");
     };
 
     @Test
@@ -62,9 +66,9 @@ public class ExecutionManagerClassTest {
 
     @Test
     public void terminateTest() throws InterruptedException {
-        Context context = executionManager.execute(runnable1, runnable2, runnable3, runnable2, runnable3, runnable1);
+        Context context = executionManager.execute(runnable1, runnable2, runnable2, runnable1);
         System.out.println("before ifFinish: " + context.isFinished());
-        context.onFinish(runnable1);
+        context.onFinish(runnable4);
         context.awaitTermination();
         System.out.println("after ifFinish: " + context.isFinished());
     }
