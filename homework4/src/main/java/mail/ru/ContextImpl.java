@@ -34,14 +34,15 @@ public class ContextImpl implements Context {
     @Override
     public void interrupt() {
         Arrays.stream(futures)
-                .forEach(s->s.cancel(false));
+                .forEach(s -> s.cancel(false));
         isInterrupt = true;
     }
 
     @Override
     public synchronized boolean isFinished() {
         //в задании написано, когда выполнятся (то есть бее исключений), поэтому второе условие такое
-        return executedCount == futures.length && executedCount == successCount;
+        return executedCount == futures.length && executedCount == successCount + exceptionCount
+                + getInterruptedTaskCount();
     }
 
     @Override
@@ -57,8 +58,8 @@ public class ContextImpl implements Context {
 
     @Override
     public void awaitTermination() throws InterruptedException {
-        synchronized (this){
-            while (this.successCount < this.futures.length){
+        synchronized (this) {
+            while (this.successCount < this.futures.length) {
                 this.wait();
             }
         }
@@ -66,12 +67,12 @@ public class ContextImpl implements Context {
 
     synchronized void success() {
         this.successCount++;
-        if(this.successCount == this.futures.length){
+        if (this.successCount == this.futures.length) {
             this.notifyAll();
         }
     }
 
-    synchronized  void exception() {
+    synchronized void exception() {
         this.exceptionCount++;
     }
 
